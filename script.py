@@ -1,20 +1,32 @@
 from PIL import Image
+import tkinter as tk
+from tkinter import filedialog
 
-image =Image.open("photo.jpg")
-ascii_art=[]
+root = tk.Tk()
+root.withdraw()
 
-width=image.width
-height=image.height
-pixels=width*height
+file_path = filedialog.askopenfilename()
+
+while not file_path:
+    file_path = filedialog.askopenfilename()
+
+
+image = Image.open(file_path)
+image = image.resize((100, 100))
+
+width, height = image.size
+
+ascii_art = []
 
 for i in range(height):
-    row=""
+    row = ""
     for j in range(width):
-        pixel_val=image.getpixel((j,i))
-        if pixel_val[0]==255 and pixel_val[1]==255 and pixel_val[2]==255:
-            row+="*"
+        pixel_val = image.getpixel((j, i))
+        if pixel_val[0] == 255 and pixel_val[1] == 255 and pixel_val[2] == 255:
+            row += "*"
         else:
-            row+="#"
-    with open("ascii_output.txt", "a") as f:
-        f.write(f'{row}\n')
+            row += "#"
+    ascii_art.append(row)
 
+with open("ascii_output.txt", "w") as f:
+    f.write("\n".join(ascii_art))
